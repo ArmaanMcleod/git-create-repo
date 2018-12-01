@@ -12,7 +12,7 @@ goto:eof
 rmdir /s /q test
 rmdir /s /q build
 rmdir /s /q dist
-rmdir /s /q git_create.egg-info
+rmdir /s /q git_create_repo.egg-info
 goto:eof
 
 :install

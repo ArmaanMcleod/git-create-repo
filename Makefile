@@ -22,7 +22,7 @@ clean:
 	rm -rf test
 	rm -rf build/
 	rm -rf dist/
-	rm -rf git_create.egg-info
+	rm -rf git_create_repo.egg-info
 
 install:
 	pip3 install -r requirements.txt
