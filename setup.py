@@ -32,7 +32,7 @@ setup(
     extras_require={},
     package_data={},
     data_files=[],
-    entry_points={"console_scripts": ["git-create=git-create:main"]},
+    entry_points={"console_scripts": ["create=create:main"]},
     project_urls={
         "Bug Reports": "https://github.com/OpticGenius/git-create-repo/issues",
         "Source": "https://github.com/OpticGenius/git-create-repo",

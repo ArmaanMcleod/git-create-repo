@@ -10,17 +10,17 @@ Creates local and remote git repository from command line. Tool is intented for 
 
 ## Usage
 
-`git-create [-p] [-u username]`
+`create [-p] [-u username]`
 
 Make sure you are in the folder you want to create a repository in. Before running, `cd` into your desired folder. 
 
 #### Create public repository
 
-`git-create`
+`create`
 
 #### Create private repository
 
-`git-create -p`
+`create -p`
 
 You can also specify your username with `-u`. Otherwise the username from `git config user.name` will be used. 
 
