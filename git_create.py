@@ -124,8 +124,8 @@ def main():
         if response.status_code == RESPONSE_CODE:
             setup_default_repo(username=username, repo_name=repo_name)
         else:
-            print("An error has occured")
-            print(response.json()["message"])
+            print("RRROR:", response.json()["message"])
+            print("Please try again")
 
 
 def setup_default_repo(username, repo_name):
