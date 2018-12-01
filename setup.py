@@ -10,7 +10,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="git-create-repo",
-    version="0.0.1",
+    version="0.0.2",
     description="Creates local and remote repository from command line",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -27,12 +27,13 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     keywords="git repository python remote",
+    py_modules=["git_create"],
     packages=find_packages(exclude=[]),
     install_requires=["requests"],
     extras_require={},
     package_data={},
     data_files=[],
-    entry_points={"console_scripts": ["create=create:main"]},
+    entry_points={"console_scripts": ["git_create=git_create:main"]},
     project_urls={
         "Bug Reports": "https://github.com/OpticGenius/git-create-repo/issues",
         "Source": "https://github.com/OpticGenius/git-create-repo",
