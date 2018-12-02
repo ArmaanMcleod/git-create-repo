@@ -10,7 +10,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="git-create-repo",
-    version="0.0.5",
+    version="0.0.6",
     description="Creates local and remote repository from command line",
     long_description=long_description,
     long_description_content_type="text/markdown",
