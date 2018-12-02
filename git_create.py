@@ -53,29 +53,13 @@ def safe_post_request(url, payload, auth):
         post_request.close()
 
 
-@contextmanager
-def handle_keyboard_interrupt():
-    """Handles keyboard interrupts.
-
-    Checks for keyboard interrupts and exits on exception.
-
-    Raises:
-        KeyboardInterrupt: If a keyboard interrupt has occured
-        SystemExit: If an error occurs, exit system
-
-    """
-
-    try:
-        yield
-    except KeyboardInterrupt:
-        print("\nInterrupted\n", end="")
-        sys.exit(0)
-
-
 def main():
     """ Main function
 
     Everything is run from here
+
+    Raises:
+        KeyboardInterrupt: If Ctrl-C is pressed
 
     """
 
@@ -83,61 +67,81 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--private", action="store_true")
     parser.add_argument("-u", "--username", type=str)
+    parser.add_argument("-s", "--ssh", action="store_true")
     args = parser.parse_args()
 
-    description = input("description: ")
+    try:
 
-    while True:
+        description = input("description: ")
 
-        password = getpass("password: ")
+        while True:
 
-        # Get username from git config
-        github_username = check_output(
-            ["git", "config", "user.name"], universal_newlines=True
-        ).strip()
+            password = getpass("password: ")
 
-        if not github_username and not args.username:
-            print("No valid username found")
-            print("Either set with git config --global user.name <your username here>")
-            print("Or pass username with --username <your username here>")
-            sys.exit(0)
+            # Get username from git config
+            github_username = check_output(
+                ["git", "config", "user.name"], universal_newlines=True
+            ).strip()
 
-        username = args.username if args.username else github_username
+            if not github_username and not args.username:
+                print("No valid username found")
+                print(
+                    "Either set with git config --global user.name <your username here>"
+                )
+                print("Or pass username with --username <your username here>")
+                sys.exit(0)
 
-        # Repository name is the folder we are currently in
-        repo_name = basename(getcwd())
+            username = args.username if args.username else github_username
 
-        # The payload to send off to the HTTP POST request
-        payload = {
-            "name": repo_name,
-            "description": description,
-            "private": args.private,
-            "has_issues": True,
-            "has_projects": True,
-            "has_wiki": True,
-        }
+            # Repository name is the folder we are currently in
+            repo_name = basename(getcwd())
 
-        with safe_post_request(
-            url="https://api.github.com/user/repos",
-            payload=dumps(payload),
-            auth=(username, password),
-        ) as response:
+            # Pick SSH or HTTPS url
+            url = (
+                "https://github.com/%s/%s.git" % (username, repo_name)
+                if not args.ssh
+                else "git@github.com:%s/%s.git" % (username, repo_name)
+            )
 
-            # Only valid if we receive 201 response
-            if response.status_code == RESPONSE_CODE:
-                setup_default_repo(username=username, repo_name=repo_name)
-                break
-            else:
-                print("ERROR:", response.json()["message"])
-                print("Please try again\n")
+            # The payload to send off to the HTTP POST request
+            payload = {
+                "name": repo_name,
+                "description": description,
+                "private": args.private,
+                "has_issues": True,
+                "has_projects": True,
+                "has_wiki": True,
+            }
+
+            with safe_post_request(
+                url="https://api.github.com/user/repos",
+                payload=dumps(payload),
+                auth=(username, password),
+            ) as response:
+
+                # Only valid if we receive 201 response
+                if response.status_code == RESPONSE_CODE:
+                    setup_default_repo(url=url, username=username, repo_name=repo_name)
+                    break
+                else:
+                    print("ERROR:", response.json()["message"])
+                    print(
+                        "Make sure the repository '%s' doesn't already exist\n"
+                        % repo_name
+                    )
+
+    except KeyboardInterrupt:
+        print("\nProgram interrupted, exiting...\n", end="")
+        sys.exit(0)
 
 
-def setup_default_repo(username, repo_name):
+def setup_default_repo(url, username, repo_name):
     """Sets up default remote repo
 
     Simulates default repo, similarily when you create a repo online.
 
     Args:
+        url (str): Thr URL of the remote repository to create
         username (str): Your Github username
         repo_name (str): The name of the repository to create
 
@@ -157,26 +161,14 @@ def setup_default_repo(username, repo_name):
     # First commit
     run(["git", "commit", "-m", "first commit"])
 
-    # HTTPS url
-    https = "https://github.com/%s/%s.git" % (username, repo_name)
-
-    # Add origin via HTTPS
-    run(
-        [
-            "git",
-            "remote",
-            "add",
-            "origin",
-            https,
-        ]
-    )
+    # Add origin to remote
+    run(["git", "remote", "add", "origin", url])
 
     # Push to remote repo and set upstream to master
     run(["git", "push", "-u", "origin", "master"])
 
-    print("\nSuccess!\nCreated %s" % https, end="")
+    print("\nSuccess!\nCreated %s\n" % url, end="")
 
 
 if __name__ == "__main__":
-    with handle_keyboard_interrupt():
-        main()
+    main()

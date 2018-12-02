@@ -9,11 +9,15 @@ Creates local and remote git repository from command line. This tool is intended
 
 `pip install git-create-repo`
 
+Or
+
+`python setup.py install`
+
 Also make sure you have [git](https://git-scm.com/downloads) installed. 
 
 ## Usage
 
-`git_create [-p] [-u username]`
+`git_create [--private] [--username username] [--ssh]`
 
 Make sure you are in the folder you want to create a repository in. Before running, `cd` into your desired folder. 
 
@@ -23,13 +27,17 @@ Make sure you are in the folder you want to create a repository in. Before runni
 
 #### Create private repository
 
-`git_create -p`
+`git_create --private`
 
-You can also specify your username with `-u`. Otherwise the username from `git config user.name` will be used. 
+You can also specify your username with `--username`. Otherwise the username from `git config user.name` will be used. 
+
+#### Remote URL
+
+By default, remotes are added by HTTPS. You can change this to SSH by adding `--ssh`, assuming you have your SSH keys setup. 
 
 #### Next steps
 
-* You will be prompted to enter your password and a description. The description can be skipped by simply pressing `enter`. If your password is incorrect, you will be prompted again
+* You will be prompted to enter your password and a description. The description can be skipped by simply pressing `enter`. If your password is incorrect, you will be prompted again.
 
 * If the above is successful, you will now have a repository created on your Github account. 
 
@@ -67,5 +75,5 @@ The other build targets are used to upload to Pypi.
 The other build targets are used to upload to Pypi. 
 
 ## Future
-* Enable SSH remote url adding. 
 * Other features that can make this tool more usable. 
+* Please let me know in the issues tab.
