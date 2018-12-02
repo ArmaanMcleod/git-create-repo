@@ -6,6 +6,7 @@ goto :default
 :test
 mkdir test
 xcopy /y git_create.py test
+cd test
 goto:eof
 
 :clean

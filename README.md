@@ -29,7 +29,7 @@ You can also specify your username with `-u`. Otherwise the username from `git c
 
 #### Next steps
 
-* You will be prompted to enter your password and a description. The description can be skipped by simply pressing `enter`. If your password is incorrect, you will have to run the program again.
+* You will be prompted to enter your password and a description. The description can be skipped by simply pressing `enter`. If your password is incorrect, you will be prompted again
 
 * If the above is successful, you will now have a repository created on your Github account. 
 
