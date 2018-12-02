@@ -68,7 +68,7 @@ def handle_keyboard_interrupt():
     try:
         yield
     except KeyboardInterrupt:
-        print("\nInterrupted")
+        print("\nInterrupted\n", end="")
         sys.exit(0)
 
 
@@ -85,47 +85,51 @@ def main():
     parser.add_argument("-u", "--username", type=str)
     args = parser.parse_args()
 
-    password = getpass("password: ")
     description = input("description: ")
 
-    # Get username from git config
-    github_username = check_output(
-        ["git", "config", "user.name"], universal_newlines=True
-    ).strip()
+    while True:
 
-    if not github_username and not args.username:
-        print("No valid username found")
-        print("Either set with git config --global user.name <your username here>")
-        print("Or pass username with --username <your username here>")
-        sys.exit(0)
+        password = getpass("password: ")
 
-    username = args.username if args.username else github_username
+        # Get username from git config
+        github_username = check_output(
+            ["git", "config", "user.name"], universal_newlines=True
+        ).strip()
 
-    # Repository name is the folder we are currently in
-    repo_name = basename(getcwd())
+        if not github_username and not args.username:
+            print("No valid username found")
+            print("Either set with git config --global user.name <your username here>")
+            print("Or pass username with --username <your username here>")
+            sys.exit(0)
 
-    # The payload to send off to the HTTP POST request
-    payload = {
-        "name": repo_name,
-        "description": description,
-        "private": args.private,
-        "has_issues": True,
-        "has_projects": True,
-        "has_wiki": True,
-    }
+        username = args.username if args.username else github_username
 
-    with safe_post_request(
-        url="https://api.github.com/user/repos",
-        payload=dumps(payload),
-        auth=(username, password),
-    ) as response:
+        # Repository name is the folder we are currently in
+        repo_name = basename(getcwd())
 
-        # Only valid if we receive 201 response
-        if response.status_code == RESPONSE_CODE:
-            setup_default_repo(username=username, repo_name=repo_name)
-        else:
-            print("RRROR:", response.json()["message"])
-            print("Please try again")
+        # The payload to send off to the HTTP POST request
+        payload = {
+            "name": repo_name,
+            "description": description,
+            "private": args.private,
+            "has_issues": True,
+            "has_projects": True,
+            "has_wiki": True,
+        }
+
+        with safe_post_request(
+            url="https://api.github.com/user/repos",
+            payload=dumps(payload),
+            auth=(username, password),
+        ) as response:
+
+            # Only valid if we receive 201 response
+            if response.status_code == RESPONSE_CODE:
+                setup_default_repo(username=username, repo_name=repo_name)
+                break
+            else:
+                print("ERROR:", response.json()["message"])
+                print("Please try again\n")
 
 
 def setup_default_repo(username, repo_name):
@@ -151,7 +155,10 @@ def setup_default_repo(username, repo_name):
     run(["git", "add", "."])
 
     # First commit
-    run(["git", "commit", "-m", '"first commit"'])
+    run(["git", "commit", "-m", "first commit"])
+
+    # HTTPS url
+    https = "https://github.com/%s/%s.git" % (username, repo_name)
 
     # Add origin via HTTPS
     run(
@@ -160,12 +167,14 @@ def setup_default_repo(username, repo_name):
             "remote",
             "add",
             "origin",
-            "https://github.com/%s/%s.git" % (username, repo_name),
+            https,
         ]
     )
 
     # Push to remote repo and set upstream to master
     run(["git", "push", "-u", "origin", "master"])
+
+    print("\nSuccess!\nCreated %s" % https, end="")
 
 
 if __name__ == "__main__":
