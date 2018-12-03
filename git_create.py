@@ -11,7 +11,6 @@ from getpass import getpass
 
 from subprocess import check_output
 from subprocess import CalledProcessError
-from subprocess import run
 
 from requests import post
 from requests import get
@@ -109,10 +108,7 @@ def main():
             ["git", "config", "user.name"], universal_newlines=True
         ).strip()
     except CalledProcessError:
-        print("Before continuing, please set the following:\n")
-        print("git config --global user.name <your username here>")
-        print("git config --global user.email <your email here>")
-        print("\nOmit --global to only set identity for this repository")
+        print(username)
         sys.exit(0)
     except FileNotFoundError:
         print("Git is not installed")
@@ -207,9 +203,12 @@ def setup_default_repo(url, auth, repo_name):
     # Run git commands
     for command in git_commands:
         try:
-            run(command)
+            output = check_output(command, universal_newlines=True).strip()
         except KeyboardInterrupt:
             print("\nProgram interrupted, exiting...\n", end="")
+            sys.exit(0)
+        except CalledProcessError:
+            print(output)
             sys.exit(0)
 
     # Send HTTP GET request to see if repository now exists
