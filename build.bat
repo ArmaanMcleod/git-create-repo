@@ -20,6 +20,11 @@ goto:eof
 pip install -r requirements.txt
 goto:eof
 
+:sandbox
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+pip install --index-url https://test.pypi.org/simple/ git-create-repo
+goto:eof
+
 :setup
 python setup.py sdist
 python setup.py bdist_wheel
@@ -29,11 +34,17 @@ goto:eof
 twine upload dist/*
 goto:eof
 
+:uninstall
+pip uninstall git-create-repo -y
+goto eof
+
 :default
 echo USAGE: build.bat (rule)
 echo Build Script rules:
 echo test - Create test directory.
 echo clean - Clean extra directories generated.
 echo install - Install dependencies.
+echo sandbox - Install test pypi package.
 echo setup - Setup source distribution and wheel.
 echo upload - Upload source distribution and wheel to PyPi.
+echo uninstall - Uninstalls Pypi package.
