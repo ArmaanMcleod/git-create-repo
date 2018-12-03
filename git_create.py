@@ -68,6 +68,7 @@ def main():
     parser.add_argument("-p", "--private", action="store_true")
     parser.add_argument("-u", "--username", type=str)
     parser.add_argument("-s", "--ssh", action="store_true")
+    parser.add_argument("-n", "--name", type=str)
     args = parser.parse_args()
 
     try:
@@ -94,7 +95,7 @@ def main():
             username = args.username if args.username else github_username
 
             # Repository name is the folder we are currently in
-            repo_name = basename(getcwd())
+            repo_name = args.name if args.name else basename(getcwd())
 
             # Pick SSH or HTTPS url
             url = (
@@ -124,11 +125,18 @@ def main():
                     setup_default_repo(url=url, username=username, repo_name=repo_name)
                     break
                 else:
-                    print("ERROR:", response.json()["message"])
-                    print(
-                        "Make sure the repository '%s' doesn't already exist\n"
-                        % repo_name
-                    )
+                    message = response.json()["message"].lower().strip()
+                    print("ERROR:", message)
+
+                    if message.startswith("bad credentials"):
+                        print("Make sure your password is correct\n")
+
+                    elif message.startswith("repository creation failed"):
+                        print(
+                            "Make sure the repository 'https://github.com/%s/%s.git' doesn't already exist"
+                            % (username, repo_name)
+                        )
+                        break
 
     except KeyboardInterrupt:
         print("\nProgram interrupted, exiting...\n", end="")
