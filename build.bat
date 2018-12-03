@@ -22,7 +22,7 @@ goto:eof
 
 :sandbox
 twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-pip install --index-url https://test.pypi.org/simple/ git-create-repo
+pip install --extra-index-url https://testpypi.python.org/pypi git-create-repo
 goto:eof
 
 :setup
