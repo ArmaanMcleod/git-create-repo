@@ -17,7 +17,7 @@ Also make sure you have [git](https://git-scm.com/downloads) installed.
 
 ## Usage
 
-`git_create [--private] [--name name] [--username username] [--ssh]`
+`git_create [--private] [--name name] [--ssh]`
 
 Make sure you are in the folder you want to create a repository in. Before running, `cd` into your desired folder. 
 
@@ -33,13 +33,13 @@ Make sure you are in the folder you want to create a repository in. Before runni
 
 You can specify a different name for the remote repository with `--name`. Otherwise the local repo name will be used. 
 
-#### Adding username
-
-You can also specify your username with `--username`. Otherwise the username from `git config user.name` will be used. 
-
 #### Remote URL
 
 By default, remotes are added by HTTPS. You can change this to SSH by adding `--ssh`, assuming you have your SSH keys setup. 
+
+#### Github Username
+
+The tool simply fetches the username from `git config user.name`. If you don't have this set, the tool with prompt you to enter it beforehand. 
 
 #### Next steps
 

@@ -33,7 +33,7 @@ install:
 
 sandbox:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-	pip3 install --index-url https://test.pypi.org/simple/ git-create-repo
+	pip3 install --extra-index-url https://testpypi.python.org/pypi git-create-repo
 
 setup:
 	python3 setup.py sdist
