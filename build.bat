@@ -36,7 +36,7 @@ goto:eof
 
 :uninstall
 pip uninstall git-create-repo -y
-goto eof
+goto:eof
 
 :default
 echo USAGE: build.bat (rule)
