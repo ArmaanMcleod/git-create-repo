@@ -52,6 +52,25 @@ def safe_post_request(url, payload, auth):
     finally:
         post_request.close()
 
+@contextmanager
+def handle_keyboard_interrupt():
+    """Handles keyboard interrupt.
+
+    Makes sure system exits on keyboard interrupt.
+
+    Raises:
+        KeyboardInterrupt: If a keyboard interrupt occurs
+        SystemExit: If an error occurs, exit system
+
+    """
+    
+    try:
+        yield
+    except KeyboardInterrupt:
+        print("\nProgram interrupted, exiting...\n", end="")
+    finally:
+        sys.exit(0)
+
 
 def main():
     """ Main function
@@ -71,7 +90,7 @@ def main():
     parser.add_argument("-n", "--name", type=str)
     args = parser.parse_args()
 
-    try:
+    with handle_keyboard_interrupt():
 
         description = input("description: ")
 
@@ -138,9 +157,6 @@ def main():
                         )
                         break
 
-    except KeyboardInterrupt:
-        print("\nProgram interrupted, exiting...\n", end="")
-        sys.exit(0)
 
 
 def setup_default_repo(url, username, repo_name):
