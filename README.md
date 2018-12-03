@@ -17,7 +17,7 @@ Also make sure you have [git](https://git-scm.com/downloads) installed.
 
 ## Usage
 
-`git_create [--private] [--username username] [--ssh]`
+`git_create [--private] [--name name] [--username username] [--ssh]`
 
 Make sure you are in the folder you want to create a repository in. Before running, `cd` into your desired folder. 
 
@@ -28,6 +28,12 @@ Make sure you are in the folder you want to create a repository in. Before runni
 #### Create private repository
 
 `git_create --private`
+
+#### Adding Remote repository name
+
+You can specify a different name for the remote repository with `--name`. Otherwise the local repo name will be used. 
+
+#### Adding username
 
 You can also specify your username with `--username`. Otherwise the username from `git config user.name` will be used. 
 
