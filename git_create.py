@@ -118,13 +118,6 @@ def main():
     # Repository name is the folder we are currently in
     repo_name = args.name if args.name else basename(getcwd())
 
-    # Pick SSH or HTTPS url
-    url = (
-        "https://github.com/%s/%s.git" % (username, repo_name)
-        if not args.ssh
-        else "git@github.com:%s/%s.git" % (username, repo_name)
-    )
-
     try:
 
         description = input("description: ")
@@ -142,6 +135,13 @@ def main():
         while True:
 
             password = getpass("password: ")
+
+            # Pick SSH or HTTPS url
+            url = (
+                "https://%s@github.com/%s/%s.git" % (username, username, repo_name)
+                if not args.ssh
+                else "git@github.com:%s/%s.git" % (username, repo_name)
+            )
 
             with safe_post_request(
                 url="https://api.github.com/user/repos",
