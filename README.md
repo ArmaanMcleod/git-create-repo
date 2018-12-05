@@ -17,9 +17,19 @@ Also make sure you have [git](https://git-scm.com/downloads) installed.
 
 ## Usage
 
-`git_create [--private] [--name name] [--ssh]`
+`git_create.py [-h] [-p] [-s] [-n NAME]`
 
-Make sure you are in the folder you want to create a repository in. Before running, `cd` into your desired folder. 
+#### Arguments
+
+```
+-h, --help            show this help message and exit
+-p, --private         private repository
+-s, --ssh             switching from https to ssh remote url. Using
+                      git@github.com... instead of https://github.com...
+-n NAME, --name NAME  name of remote repository
+  ```
+
+Make sure you `cd` into the correct folder you want to create a repository in.
 
 #### Create public repository
 
@@ -27,15 +37,15 @@ Make sure you are in the folder you want to create a repository in. Before runni
 
 #### Create private repository
 
-`git_create --private`
+`git_create -p`
 
 #### Adding Remote repository name
 
-You can specify a different name for the remote repository with `--name`. Otherwise the local repo name will be used. 
+You can specify a different name for the remote repository with `-n`. Otherwise the local repo name will be used. 
 
-#### Remote URL
+#### Switching Remote URL
 
-By default, remotes are added by HTTPS. You can change this to SSH by adding `--ssh`, assuming you have your SSH keys setup. 
+By default, remotes are added by HTTPS. You can change this to SSH by adding `-s`, assuming you have your SSH keys setup. 
 
 #### Github Username
 
@@ -50,7 +60,7 @@ The tool simply fetches the username from `git config user.name`. If you don't h
 ## Note
 
 * This will create a default `README.md` file including the name of your repository if none exist. 
-* It is also suggested to create your own `.gitignore`, so you can ignore what files you don't want commited beforehand. 
+* It is also suggested to create your own `.gitignore`, so you can ignore what files you don't want commited beforehand. All files get committed otherwise. 
 
 ## Development
 

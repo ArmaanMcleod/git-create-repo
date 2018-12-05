@@ -97,9 +97,16 @@ def main():
 
     # Collect command line arguements
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--private", action="store_true")
-    parser.add_argument("-s", "--ssh", action="store_true")
-    parser.add_argument("-n", "--name", type=str)
+    parser.add_argument(
+        "-p", "--private", action="store_true", help="private repository"
+    )
+    parser.add_argument(
+        "-s",
+        "--ssh",
+        action="store_true",
+        help="switching from https to ssh remote url. Using git@github.com... instead of https://github.com...",
+    )
+    parser.add_argument("-n", "--name", type=str, help="name of remote repository")
     args = parser.parse_args()
 
     # Get username from git config
