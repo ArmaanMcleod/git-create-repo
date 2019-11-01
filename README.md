@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/git-create-repo.svg)](https://badge.fury.io/py/git-create-repo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Creates local and remote git repository from command line. This tool is intended for **Python 3**.
+Creates local and remote git repositories from command line. This tool is intended for **Python 3**.
 
 ## Install
 
